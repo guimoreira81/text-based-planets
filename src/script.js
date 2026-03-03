@@ -1,33 +1,33 @@
 class vector {
     constructor(x, y) {
-        this.x = x;
-        this.y = y;
+        this.x = x
+        this.y = y
     }
     add(Other) {
-        return new vector(this.x + Other.x, this.y + Other.y);
+        return new vector(this.x + Other.x, this.y + Other.y)
     }
     sub(Other) {
-        return new vector(this.x - Other.x, this.y - Other.y);
+        return new vector(this.x - Other.x, this.y - Other.y)
     }
     mul(Other) {
         if (typeof (Other) == "number") {
-            return new vector(this.x * Other, this.y * Other);
+            return new vector(this.x * Other, this.y * Other)
         } else {
-            return new vector(this.x * Other.x, this.y * Other.y);
+            return new vector(this.x * Other.x, this.y * Other.y)
         }
     }
     div(Other) {
         if (typeof (Other) == "number") {
-            return new vector(this.x / Other, this.y / Other);
+            return new vector(this.x / Other, this.y / Other)
         }
     }
-    Magnitude() {
-        return sqrt(this.x * this.x + this.y * this.y);
+    magnitude() {
+        return sqrt(this.x * this.x + this.y * this.y)
     }
-    Unit() {
-        return this.div(this.Magnitude());
+    unit() {
+        return this.div(this.magnitude())
     }
-    Text() {
+    text() {
         return "(" + this.x + ", " + this.y + ")"
     }
 }
@@ -46,7 +46,7 @@ class screen {
     drawPixel(Char, Position) {
         Position = new vector(int(Position.x), int(Position.y))
         if (Position.x >= 0 && Position.x < this.Size.x && Position.y >= 0 && Position.y < this.Size.y) {
-            this.Screen[Position.y * this.Size.x + Position.x] = Char;
+            this.Screen[Position.y * this.Size.x + Position.x] = Char
         }
     }
     drawText(Text, Position) {
@@ -64,9 +64,9 @@ class screen {
     drawCircle(Char, Position, Diameter) {
         for (let x = 0; x < Diameter; x++) {
             for (let y = 0; y < Diameter; y++) {
-                let Center = new vector(Diameter / 2, Diameter / 2);
-                if (new vector(x, y).sub(Center).Magnitude() < Diameter / 2) {
-                    this.drawPixel(Char, Position.add(new vector(x, y)));
+                let Center = new vector(Diameter / 2, Diameter / 2)
+                if (new vector(x, y).sub(Center).magnitude() < Diameter / 2) {
+                    this.drawPixel(Char, Position.add(new vector(x, y)))
                 }
             }
         }
@@ -74,17 +74,22 @@ class screen {
     refresh() {
         background("black")
         for (let y = 0; y < this.Size.y; y++) {
-            let Text = ""
+            //let Text = ""
             for (let x = 0; x < this.Size.x; x++) {
-                Text += this.Screen[y * this.Size.x + x]
+                const char = this.Screen[y * this.Size.x + x]
+                //Text += this.Screen[y * this.Size.x + x]
+
+                fill("white")
+                textFont("monospace")
+                textSize(height/this.Size.y)
+                textAlign(CENTER, CENTER)
+                text(char, (x+0.5)*(window.innerHeight/this.Size.y), (y+0.5)*window.innerHeight/this.Size.y)
             }
-            fill("white")
-            textFont("monospace");
-            textSize(height/this.Size.y)
+            
             //console.log(this.Size.y)
             //console.log(height/this.Size.y)
-            textAlign(CENTER, CENTER)
-            text(Text, width * 0.5, height / this.Size.y * (y + 0.5))
+            
+            //text(Text, width * 0.5, height / this.Size.y * (y + 0.5))
         }
     }
 }
@@ -148,17 +153,17 @@ class button {
     }
 }
 
-let WalkButtonSize = new vector(0.12, 0.12)
-let DownButton = new button("Down", new vector(0.15, 0.8), WalkButtonSize, "v")
-let UpButton = new button("Up", new vector(0.15, 0.65), WalkButtonSize, "^")
-let LeftButton = new button("Left", new vector(0, 0.8), WalkButtonSize, "<")
-let RightButton = new button("Right", new vector(0.3, 0.8), WalkButtonSize, ">")
-let AddZoomButton = new button("AddZoom", new vector(0.9, 0.05), new vector(0.1, 0.1), "+")
-let DecreaseZoomButton = new button("DecreaseZoom", new vector(0.75, 0.05), new vector(0.1, 0.1), "-")
+let WalkButtonSize = new vector(0.07, 0.12)
+let DownButton = new button("Down", new vector(0.14, 0.8), WalkButtonSize, "v")
+let UpButton = new button("Up", new vector(0.14, 0.65), WalkButtonSize, "^")
+let LeftButton = new button("Left", new vector(0.05, 0.8), WalkButtonSize, "<")
+let RightButton = new button("Right", new vector(0.23, 0.8), WalkButtonSize, ">")
+let AddZoomButton = new button("AddZoom", new vector(0.89, 0.05), new vector(0.05, 0.1), "+")
+let DecreaseZoomButton = new button("DecreaseZoom", new vector(0.81, 0.05), new vector(0.05, 0.1), "-")
 
-let CreateButton = new button("CreateButton", new vector(0.8, 0.6), new vector(0.25, 0.1), "-", "Criar")
-let DestroyButton = new button("DestroyButton", new vector(0.8, 0.85), new vector(0.25, 0.1), "-", "Destruir")
-let DetailsButton = new button("DetailsButton", new vector(0.8, 0.725), new vector(0.25, 0.1), "-", "Detalhes")
+let CreateButton = new button("CreateButton", new vector(0.75, 0.6), new vector(0.25, 0.1), "-", "Criar")
+let DestroyButton = new button("DestroyButton", new vector(0.75, 0.85), new vector(0.25, 0.1), "-", "Destruir")
+let DetailsButton = new button("DetailsButton", new vector(0.75, 0.725), new vector(0.25, 0.1), "-", "Detalhes")
 let SetReference = new button("SetReference", new vector(0.5, .725), new vector(0.3, 0.075), "-", "Colocar Referência")
 SetReference.Visible = false
 let DetailsName = new button("DetailsName", new vector(0.65, 0.625), new vector(0, 0), "-", "Nome: Undefined")
@@ -188,7 +193,6 @@ function SetSelected(selected) {
 
 function ScreenToWorldPos(Position) {
     Position = Position.sub(new vector(width / 2, height / 2))
-    console.log(Position.Text())
     return new vector((Position.x / width * Screen.Size.x) / Camera.Zoom - Camera.Position.x, (Position.y / height * Screen.Size.y) / Camera.Zoom - Camera.Position.y)
 }
 
@@ -207,7 +211,7 @@ function mouseDown(TouchOnScreen, Button) {
         if (Mode == "Destroy") {
             for (let i in Objects) {
                 let Object = Objects[i]
-                if (Object.Position.sub(Position).Magnitude() < Object.Diameter / 2) {
+                if (Object.Position.sub(Position).magnitude() < Object.Diameter / 2) {
                     Objects.splice(i, 1)
                 }
             }
@@ -216,7 +220,7 @@ function mouseDown(TouchOnScreen, Button) {
             SetSelected(undefined)
             for (let i in Objects) {
                 let Object = Objects[i]
-                if ((Object.Position.sub(Position)).Magnitude() < Object.Diameter / 2) {
+                if ((Object.Position.sub(Position)).magnitude() < Object.Diameter / 2) {
                     SetSelected(Object)
                 }
             }
@@ -258,10 +262,10 @@ function mouseDown(TouchOnScreen, Button) {
 }
 
 function mouseUp(TouchOnScreen, Button) {
-    let Position = ScreenToWorldPos(new vector(mouseX, mouseY));
+    let Position = ScreenToWorldPos(new vector(mouseX, mouseY))
     if (CreatingCelestialBody[1] == true && TouchOnScreen) {
-        let Object = new object(Objects.length.toString(), CreatingCelestialBody[0]);
-        Object.Velocity = Position.sub(CreatingCelestialBody[0]).mul(0.5 / TimeScale);
+        let Object = new object(Objects.length.toString(), CreatingCelestialBody[0])
+        Object.Velocity = Position.sub(CreatingCelestialBody[0]).mul(0.5 / TimeScale)
         Object.Mass = 3.14 * (Object.Diameter / 2) ** 2
         Object.Color = 0
         CreatingCelestialBody[1] = false
@@ -284,9 +288,56 @@ function refreshModeButtons(BSelected) {
 }
 refreshModeButtons(CreateButton)
 
+document.addEventListener("wheel", (event) => {
+    if (event.deltaY < 0){
+        Camera.Zoom /= 0.95
+    } else {
+        Camera.Zoom /= 1.05
+        if (Camera.Zoom < 0.0001){
+            Camera.Zoom = 0.0001
+        }
+    }
+})
+
+let keys = {
+    "w": false,
+    "a": false,
+    "s": false,
+    "d": false,
+}
+
+document.addEventListener("keydown", (event) => {
+    if (keys[event.key] != undefined) {
+        keys[event.key] = true
+    }
+})
+document.addEventListener("keyup", (event) => {
+    if (keys[event.key] != undefined) {
+        keys[event.key] = false
+    }
+})
+
+function moveCamera(direction){
+    Camera.Position = Camera.Position.add(direction.mul(10*dt/Camera.Zoom))
+}
+
+
 let LastIsPressed = false
 let dt = 1 / 12
 function draw() {
+    if (keys["w"]) {
+        moveCamera(new vector(0, 1))
+    }
+    if (keys["s"]) {
+        moveCamera(new vector(0, -1))
+    }
+    if (keys["d"]) {
+        moveCamera(new vector(-1, 0))
+    }
+    if (keys["a"]) {
+        moveCamera(new vector(1, 0))
+    }
+    resizeCanvas(window.innerWidth, window.innerHeight)
     Screen.fillScreen(" ")
     for (let i in Objects) {
         let Object = Objects[i]
@@ -320,10 +371,10 @@ function draw() {
             let Other = Objects[i2]
             if (Object.Position.x != Other.Position.x && Object.Position.y != Other.Position.y) {
                 let diff = Other.Position.sub(Object.Position)
-                let Direction = diff.Unit();
-                let Distance = diff.Magnitude();
+                let Direction = diff.unit()
+                let Distance = diff.magnitude()
                 if (Distance > (Object.Diameter + Other.Diameter) / 2) {
-                    Acceleration = Acceleration.add(Direction.mul(Other.Mass).div(Distance ** 2));
+                    Acceleration = Acceleration.add(Direction.mul(Other.Mass).div(Distance ** 2))
                 } else if (Other.Mass > Object.Mass) {
                     Other.Velocity = Other.Velocity.add(Object.Velocity.sub(Other.Velocity)).div(Other.Mass / Object.Mass)
                     Other.Mass += Object.Mass
@@ -331,13 +382,13 @@ function draw() {
                 }
             }
         }
-        Object.Velocity = Object.Velocity.add(Acceleration.mul(dt * TimeScale));
-        //Object.Velocity = Object.Velocity.mul(1+dt*TimeScale*0.005);
-        Object.Position = Object.Position.add(Object.Velocity.mul(dt * TimeScale));
+        Object.Velocity = Object.Velocity.add(Acceleration.mul(dt * TimeScale))
+        //Object.Velocity = Object.Velocity.mul(1+dt*TimeScale*0.005)
+        Object.Position = Object.Position.add(Object.Velocity.mul(dt * TimeScale))
         let RelativePosition = Object.Position.add(new vector(-Object.Diameter / 2, -Object.Diameter / 2)).add(Camera.Position).mul(Camera.Zoom).add(Screen.Size.div(2))
         if (Object.Shape == "Circle") {
             Screen.drawCircle(Object.Color, RelativePosition, Object.Diameter * Camera.Zoom)
-            Screen.drawText("", RelativePosition);
+            Screen.drawText("", RelativePosition)
         }
         if (Object.Shape == "Rect") {
             Screen.drawRect(Object.Color, RelativePosition, new vector(Object.Diameter * Camera.Zoom, Object.Diameter * Camera.Zoom))
@@ -361,28 +412,27 @@ function draw() {
         if (Button.Visible && mouseIsPressed && Pos.x > Button.Position.x && Pos.x < Button.Position.x + Button.Size.x && Pos.y > Button.Position.y && Pos.y < Button.Position.y + Button.Size.y) {
             TouchOnScreen = false
             ButtonPressed = Button
-            if (Button.Name == "Up") {
-                Camera.Position = Camera.Position.add(new vector(0, 10 * dt / Camera.Zoom))
+            if (Button.Name == "Up" || keys["w"]) {
+                moveCamera(new vector(0, 1))
             }
-            if (Button.Name == "Down") {
-                Camera.Position = Camera.Position.add(new vector(0, -10 * dt / Camera.Zoom))
+            if (Button.Name == "Down" || keys["s"]) {
+                moveCamera(new vector(0, -1))
             }
-            if (Button.Name == "Left") {
-                Camera.Position =
-                    Camera.Position.add(new vector(10 * dt / Camera.Zoom, 0))
+            if (Button.Name == "Left" || keys["a"]) {
+                moveCamera(new vector(1, 0))
             }
-            if (Button.Name == "Right") {
-                Camera.Position = Camera.Position.add(new vector(-10 * dt / Camera.Zoom, 0))
+            if (Button.Name == "Right" || keys["d"]) {
+                moveCamera(new vector(-1, 0))
             }
             if (Button.Name == "AddZoom") {
-                Camera.Zoom *= 1 + dt * 0.5;
+                Camera.Zoom *= 1 + dt * 0.5
             }
             if (Button.Name == "DecreaseZoom") {
-                Camera.Zoom *= 1 - dt * 0.5;
+                Camera.Zoom *= 1 - dt * 0.5
             }
         }
     }
-    Screen.drawText("@guimo81", new vector(0, 0))
+    Screen.drawText("@_guilherme.mor", new vector(0, 0))
     if (LastIsPressed == false && mouseIsPressed) {
         mouseDown(TouchOnScreen, ButtonPressed)
     }
