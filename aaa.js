@@ -39,7 +39,7 @@ class screen {
     }
     fillScreen(Char) {
         this.Screen = []
-        for (let i = 0; i < this.Size.x*this.Size.y; i++) {
+        for (let i = 0; i < this.Size.x * this.Size.y; i++) {
             this.Screen.push(Char)
         }
     }
@@ -79,35 +79,19 @@ class screen {
                 Text += this.Screen[y * this.Size.x + x]
             }
             fill("white")
-            textFont("monospace");
-            textSize(height/this.Size.y)
-            //console.log(this.Size.y)
-            //console.log(height/this.Size.y)
+            textFont("Courier New");
+            textSize(height / this.Size.y)
             textAlign(CENTER, CENTER)
             text(Text, width * 0.5, height / this.Size.y * (y + 0.5))
         }
     }
 }
 
-//Tamanho da fonte: 40/window.innerHeight
-/*
-Quantos tamanhos de fonte cabem na largura da tela? 
-fonte*x = tela.x
-fonte = telaX/x
-fonte = f
-tela.x = t
-resultado = x
-
-xf = t
-x = t/f
-
-*/
-//console.log(window.innerHeight/40)
-let ScreenSize = new vector(Math.floor(window.innerWidth/(window.innerHeight/40)), 40)
-let Screen = new screen(ScreenSize)
+let ScreenSize = new vector(66, 40)
+let Screen = new screen(ScreenSize);
 
 function setup() {
-    createCanvas(window.innerWidth, window.innerHeight)
+    createCanvas(400, 400);
 }
 
 let Objects = []
@@ -186,10 +170,13 @@ function SetSelected(selected) {
     }
 }
 
+function setup() {
+    createCanvas(400, 400)
+}
+
 function ScreenToWorldPos(Position) {
     Position = Position.sub(new vector(width / 2, height / 2))
-    console.log(Position.Text())
-    return new vector((Position.x / width * Screen.Size.x) / Camera.Zoom - Camera.Position.x, (Position.y / height * Screen.Size.y) / Camera.Zoom - Camera.Position.y)
+    return new vector((Position.x / width * Screen.Size.x) / Camera.Zoom - Camera.Position.x, (Position.y / height * Screen.Size.y) / Camera.Zoom - Camera.Position.y);
 }
 
 let Mode = "Create"
