@@ -39,7 +39,7 @@ class screen {
     }
     fillScreen(Char) {
         this.Screen = []
-        for (let i = 0; i < this.Size.x*this.Size.y; i++) {
+        for (let i = 0; i < this.Size.x * this.Size.y; i++) {
             this.Screen.push(Char)
         }
     }
@@ -81,14 +81,14 @@ class screen {
 
                 fill("white")
                 textFont("monospace")
-                textSize(height/this.Size.y)
+                textSize(height / this.Size.y)
                 textAlign(CENTER, CENTER)
-                text(char, (x+0.5)*(window.innerHeight/this.Size.y), (y+0.5)*window.innerHeight/this.Size.y)
+                text(char, (x + 0.5) * (window.innerHeight / this.Size.y), (y + 0.5) * window.innerHeight / this.Size.y)
             }
-            
+
             //console.log(this.Size.y)
             //console.log(height/this.Size.y)
-            
+
             //text(Text, width * 0.5, height / this.Size.y * (y + 0.5))
         }
     }
@@ -108,7 +108,7 @@ x = t/f
 
 */
 //console.log(window.innerHeight/40)
-let ScreenSize = new vector(Math.floor(window.innerWidth/(window.innerHeight/40)), 40)
+let ScreenSize = new vector(Math.floor(window.innerWidth / (window.innerHeight / 40)), 40)
 let Screen = new screen(ScreenSize)
 
 function setup() {
@@ -140,6 +140,8 @@ Camera.Position = new vector(0, 0)
 Camera.Velocity = new vector(0, 10)
 Camera.Zoom = 1
 
+const touchScreen = 'ontouchstart' in window || navigator.msMaxTouchPoints || false
+console.log("Touch Screen: " + touchScreen)
 let Buttons = []
 class button {
     constructor(Name, Position, Size, Char, Text = "") {
@@ -160,6 +162,12 @@ let LeftButton = new button("Left", new vector(0.05, 0.8), WalkButtonSize, "<")
 let RightButton = new button("Right", new vector(0.23, 0.8), WalkButtonSize, ">")
 let AddZoomButton = new button("AddZoom", new vector(0.89, 0.05), new vector(0.05, 0.1), "+")
 let DecreaseZoomButton = new button("DecreaseZoom", new vector(0.81, 0.05), new vector(0.05, 0.1), "-")
+DownButton.Visible = touchScreen
+UpButton.Visible = touchScreen
+LeftButton.Visible = touchScreen
+RightButton.Visible = touchScreen
+AddZoomButton.Visible = touchScreen
+DecreaseZoomButton.Visible = touchScreen
 
 let CreateButton = new button("CreateButton", new vector(0.75, 0.6), new vector(0.25, 0.1), "-", "Criar")
 let DestroyButton = new button("DestroyButton", new vector(0.75, 0.85), new vector(0.25, 0.1), "-", "Destruir")
@@ -169,6 +177,7 @@ SetReference.Visible = false
 let DetailsName = new button("DetailsName", new vector(0.65, 0.625), new vector(0, 0), "-", "Nome: Undefined")
 DetailsName.Visible = false
 let ZoomText = new button("ZoomText", new vector(0.875, 0.025), new vector(0, 0), " ", "Zoom")
+ZoomText.Visible = touchScreen
 let ShowPathButton = new button("ShowPath", new vector(0.11, 0.05), new vector(0.25, 0.075), "#", "Mostrar Caminho")
 let ShowPath = true
 
@@ -289,11 +298,11 @@ function refreshModeButtons(BSelected) {
 refreshModeButtons(CreateButton)
 
 document.addEventListener("wheel", (event) => {
-    if (event.deltaY < 0){
+    if (event.deltaY < 0) {
         Camera.Zoom /= 0.95
     } else {
         Camera.Zoom /= 1.05
-        if (Camera.Zoom < 0.0001){
+        if (Camera.Zoom < 0.0001) {
             Camera.Zoom = 0.0001
         }
     }
@@ -317,8 +326,8 @@ document.addEventListener("keyup", (event) => {
     }
 })
 
-function moveCamera(direction){
-    Camera.Position = Camera.Position.add(direction.mul(10*dt/Camera.Zoom))
+function moveCamera(direction) {
+    Camera.Position = Camera.Position.add(direction.mul(10 * dt / Camera.Zoom))
 }
 
 
@@ -330,7 +339,7 @@ function draw() {
     }
     if (keys["s"]) {
         moveCamera(new vector(0, -1))
-    }
+    } touchScreen
     if (keys["d"]) {
         moveCamera(new vector(-1, 0))
     }
@@ -407,28 +416,29 @@ function draw() {
         if (Button.Visible) {
             Screen.drawRect(Button.Char, Button.Position.mul(Screen.Size), Button.Size.mul(Screen.Size))
             Screen.drawText(Button.Text, new vector(Button.Position.x + Button.Size.x / 2, Button.Position.y + Button.Size.y / 2).mul(Screen.Size).sub(new vector(Button.Text.length / 2, 0)))
-        }
-        let Pos = new vector(mouseX / width, mouseY / height)
-        if (Button.Visible && mouseIsPressed && Pos.x > Button.Position.x && Pos.x < Button.Position.x + Button.Size.x && Pos.y > Button.Position.y && Pos.y < Button.Position.y + Button.Size.y) {
-            TouchOnScreen = false
-            ButtonPressed = Button
-            if (Button.Name == "Up" || keys["w"]) {
-                moveCamera(new vector(0, 1))
-            }
-            if (Button.Name == "Down" || keys["s"]) {
-                moveCamera(new vector(0, -1))
-            }
-            if (Button.Name == "Left" || keys["a"]) {
-                moveCamera(new vector(1, 0))
-            }
-            if (Button.Name == "Right" || keys["d"]) {
-                moveCamera(new vector(-1, 0))
-            }
-            if (Button.Name == "AddZoom") {
-                Camera.Zoom *= 1 + dt * 0.5
-            }
-            if (Button.Name == "DecreaseZoom") {
-                Camera.Zoom *= 1 - dt * 0.5
+            
+            let Pos = new vector(mouseX / width, mouseY / height)
+            if (mouseIsPressed && Pos.x > Button.Position.x && Pos.x < Button.Position.x + Button.Size.x && Pos.y > Button.Position.y && Pos.y < Button.Position.y + Button.Size.y) {
+                TouchOnScreen = false
+                ButtonPressed = Button
+                if (Button.Name == "Up" || keys["w"]) {
+                    moveCamera(new vector(0, 1))
+                }
+                if (Button.Name == "Down" || keys["s"]) {
+                    moveCamera(new vector(0, -1))
+                }
+                if (Button.Name == "Left" || keys["a"]) {
+                    moveCamera(new vector(1, 0))
+                }
+                if (Button.Name == "Right" || keys["d"]) {
+                    moveCamera(new vector(-1, 0))
+                }
+                if (Button.Name == "AddZoom") {
+                    Camera.Zoom *= 1 + dt * 0.5
+                }
+                if (Button.Name == "DecreaseZoom") {
+                    Camera.Zoom *= 1 - dt * 0.5
+                }
             }
         }
     }
